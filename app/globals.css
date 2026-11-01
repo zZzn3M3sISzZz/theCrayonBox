@@ -1,26 +1,149 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "The Untold Story";
+  src:
+    local("The Untold Story"),
+    local("TheUntoldStory-Regular"),
+    url("/fonts/TheUntoldStory.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #161616;
+  --muted: #3c3c3c;
+  --sky: #d5f2fc;
+  --lime: #e6f56c;
+  --card: #f3f3f3;
+  --line: #e6e6e6;
+  --form: #e7f6fd;
+  --paper: #ffffff;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-sky: var(--sky);
+  --color-lime: var(--lime);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-form: var(--form);
+  --color-paper: var(--paper);
+  --font-display: var(--font-radio), "Radio Canada Big", sans-serif;
+  --font-serif: var(--font-source), "Source Serif 4", Georgia, serif;
+  --font-story: "The Untold Story", cursive;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-serif);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+.wordmark {
+  font-family: var(--font-story);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.dot-field {
+  background-color: var(--lime);
+  background-image: radial-gradient(#6a5de6 1.2px, transparent 1.25px);
+  background-size: 18px 18px;
+}
+
+.scribble {
+  background-color: #f7f7f7;
+  background-image:
+    repeating-linear-gradient(
+      118deg,
+      transparent 0 10px,
+      rgba(0, 0, 0, 0.05) 10px 11px
+    ),
+    repeating-linear-gradient(
+      18deg,
+      #ffffff 0 14px,
+      #ececec 14px 16px,
+      #f7f7f7 16px 28px,
+      #dedede 28px 29px
+    );
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #161616;
+  outline-offset: 3px;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.reveal-load,
+.reveal-scroll.is-in {
+  animation: fade-up 320ms ease-out both;
+}
+
+.reveal-delay-1 {
+  animation-delay: 80ms;
+}
+
+.reveal-delay-2 {
+  animation-delay: 160ms;
+}
+
+.reveal-delay-3 {
+  animation-delay: 240ms;
+}
+
+.reveal-scroll:not(.is-in) {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+}
+
+@media (scripting: none) {
+  .reveal-scroll,
+  .reveal-scroll:not(.is-in) {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal-load,
+  .reveal-scroll,
+  .reveal-scroll.is-in,
+  .reveal-scroll:not(.is-in) {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }

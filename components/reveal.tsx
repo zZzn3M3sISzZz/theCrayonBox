@@ -1,0 +1,65 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+type RevealProps = {
+  children: React.ReactNode;
+  className?: string;
+  delay?: 0 | 1 | 2 | 3;
+  id?: string;
+  when?: "load" | "scroll";
+  as?: "div" | "li" | "section" | "figure" | "article";
+};
+
+export function Reveal({
+  children,
+  className = "",
+  delay = 0,
+  id,
+  when = "scroll",
+  as: Tag = "div",
+}: RevealProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(when === "load");
+
+  useEffect(() => {
+    if (when !== "scroll") return;
+    const node = ref.current;
+    if (!node) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.16, rootMargin: "0px 0px -10% 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [when]);
+
+  const classes = [
+    when === "load" ? "reveal-load" : "reveal-scroll",
+    inView && when === "scroll" ? "is-in" : "",
+    delay === 1 ? "reveal-delay-1" : "",
+    delay === 2 ? "reveal-delay-2" : "",
+    delay === 3 ? "reveal-delay-3" : "",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <Tag id={id} ref={ref as never} className={classes}>
+      {children}
+    </Tag>
+  );
+}
